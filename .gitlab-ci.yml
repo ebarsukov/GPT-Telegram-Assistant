@@ -1,0 +1,64 @@
+stages:
+  - test
+  - docker build
+  - docker push
+
+pylint:
+  stage: test
+  image: python:3.10-slim-buster
+  before_script:
+    - pip install -r requirements.txt
+    - pip install -r requirements-dev.txt
+  script:
+    - pylint ./app
+  only:
+    - candidate
+    - main
+
+Docker build:
+  stage: docker build
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - NAME=$(cat app/name)
+    - VERSION=$(cat app/version)
+    - docker build -t ebarsukov/${NAME}:${VERSION}  -f docker/Dockerfile .
+    - docker push ebarsukov/${NAME}:${VERSION}
+  before_script:
+    - echo -n ${DOCKER_PASS} | docker login -u robocafe --password-stdin
+  only:
+    - candidate
+    - main
+
+Docker push candidate:
+  stage: docker push
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - NAME=$(cat app/name)
+    - VERSION=$(cat app/version)
+    - docker pull robocafe/${NAME}:${VERSION}
+    - docker tag ebarsukov/${NAME}:${VERSION} ebarsukov/${NAME}:candidate
+    - docker push ebarsukov/${NAME}:candidate
+  before_script:
+    - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
+  only:
+    - candidate
+
+Docker push latest:
+  stage: docker push
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - NAME=$(cat app/name)
+    - VERSION=$(cat app/version)
+    - docker pull robocafe/${NAME}:${VERSION}
+    - docker tag ebarsukov/${NAME}:${VERSION} ebarsukov/${NAME}:latest
+    - docker push ebarsukov/${NAME}:latest
+  before_script:
+    - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
+  only:
+    - tag

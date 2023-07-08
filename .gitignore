@@ -1,0 +1,9 @@
+$ cat .gitignore
+venv/
+.pytest_cache
+.idea
+__pycache__
+.vscode
+config
+log
+.coverage

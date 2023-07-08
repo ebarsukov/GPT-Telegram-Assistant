@@ -1,0 +1,18 @@
+default:
+  environment:
+    OPENAI_API_KEY: sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    OPENAI_API_MODEL: gpt-3.5-turbo-0301
+    OPENAI_CHAT_LIFETIME_SEC: 1800
+    OPENAI_TEMPERATURE: 0.5
+    OPENAI_MAX_TOKENS: 100
+    OPENAI_CHAT_USER_PRESET: ""
+    OPENAI_CHAT_SYSTEM_PRESET: "You are an intellectual assistant, The name of your interlocutor is {user_name}"
+    TELEGRAM_BOT_TOKEN: xxxxxxxxxx:xx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    BUFFER_MSG_LIFETIME_SEC: 180
+
+  log:
+    FILE_NAME_FORMAT: "{time:YYYY-MM-DD_HH-mm-ss-SS}.log"
+    FORMAT: "{time:YY-MM-DD HH:mm:ss.SS} | {level} | {message}"
+    ROTATION: 10 MB
+    RETETION: 1 week
+    LEVEL: DEBUG

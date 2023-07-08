@@ -1,0 +1,5 @@
+loguru~=0.7.0
+pyTelegramBotAPI~=4.12.0
+pydantic~= 2.0.2
+dynaconf~=3.1.12
+openai~=0.27.8
