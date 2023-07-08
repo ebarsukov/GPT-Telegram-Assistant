@@ -34,7 +34,7 @@ Docker build:
     - main
 
 Docker push candidate:
-  stage: docker push candidate
+  stage: docker candidate
   image: docker
   script:
     - docker pull robocafe/${IMG_NAME}:test
