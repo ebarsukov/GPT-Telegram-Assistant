@@ -1,9 +1,9 @@
 # GPT Telegram Asistant
 
-![GitHub top language](https://img.shields.io/github/languages/top/ebarsukov/gpt-telegram-assistant)
+[![GitHub top language](https://img.shields.io/github/languages/top/ebarsukov/gpt-telegram-assistant)]()
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Stars](https://img.shields.io/github/stars/ebarsukov/gpt-telegram-assistant.svg?maxAge=86400)](https://github.com/ebarsukov/gpt-telegram-assistant)
-![Docker Pulls](https://img.shields.io/docker/pulls/edevai/gpt-telegram-asystant.svg?maxAge=86400)
+[![Docker Pulls](https://img.shields.io/docker/pulls/edevai/gpt-telegram-asystant.svg?maxAge=86400)]()
 [![Version](https://img.shields.io/github/release/ebarsukov/gpt-telegram-assistant?display_name=tag&sort=semver)](https://github.com/ebarsukov/gpt-telegram-assistant/releases)
 
 
