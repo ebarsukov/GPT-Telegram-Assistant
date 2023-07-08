@@ -8,7 +8,6 @@ variables:
   IMG_NAME: $(cat app/name)
   IMG_VERSION: $(cat app/version)
 
-
 pylint:
   stage: test
   image: python:3.10-slim-buster
@@ -24,6 +23,8 @@ pylint:
 Docker build:
   stage: docker build
   image: docker
+  services:
+    - docker:dind
   script:
     - docker build -t ebarsukov/${IMG_NAME}:test  -f docker/Dockerfile .
     - docker push ebarsukov/${IMG_NAME}:test
@@ -36,6 +37,8 @@ Docker build:
 docker push candidate:
   stage: docker candidate
   image: docker
+  services:
+    - docker:dind
   script:
     - docker pull robocafe/${IMG_NAME}:test
     - docker tag ebarsukov/${IMG_NAME}:test ebarsukov/${IMG_NAME}:candidate
@@ -48,6 +51,8 @@ docker push candidate:
 docker push latest:
   stage: docker release
   image: docker
+  services:
+    - docker:dind
   script:
     - docker pull robocafe/${IMG_NAME}:test
     - docker tag ebarsukov/${IMG_NAME}:test ebarsukov/${IMG_NAME}:latest
@@ -60,6 +65,8 @@ docker push latest:
 docker push version:
   stage: docker release
   image: docker
+  services:
+    - docker:dind
   script:
     - docker pull robocafe/${IMG_NAME}:test
     - docker tag ebarsukov/${IMG_NAME}:test ebarsukov/${IMG_NAME}:${IMG_VERSION}
