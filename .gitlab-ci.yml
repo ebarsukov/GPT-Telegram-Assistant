@@ -1,8 +1,15 @@
 stages:
   - test
-  - docker push
+  - docker build
+  - docker canditate
+  - docker release
 
-pylint:
+variables:
+  IMG_NAME: $(cat app/name)
+  IMG_VERSION: $(cat app/version)
+
+
+Pylint:
   stage: test
   image: python:3.10-slim-buster
   before_script:
@@ -14,48 +21,49 @@ pylint:
     - candidate
     - main
 
-Docker push candidate:
-  stage: docker push
+Docker build:
+  stage: docker build
   image: docker
-  services:
-    - docker:dind
   script:
-    - NAME=$(cat app/name)
-    - VERSION=$(cat app/version)
-    - docker build -t ebarsukov/${NAME}:${VERSION}
-    - docker tag ebarsukov/${NAME}:${VERSION} ebarsukov/${NAME}:candidate
-    - docker push ebarsukov/${NAME}:candidate
+    - docker build -t ebarsukov/${IMG_NAME}:test  -f docker/Dockerfile .
+    - docker push ebarsukov/${IMG_NAME}:test
+  before_script:
+    - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
+  only:
+    - candidate
+    - main
+
+Docker push candidate:
+  stage: docker push candidate
+  image: docker
+  script:
+    - docker pull robocafe/${IMG_NAME}:test
+    - docker tag ebarsukov/${IMG_NAME}:test ebarsukov/${IMG_NAME}:candidate
+    - docker push ebarsukov/${IMG_NAME}:candidate
   before_script:
     - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
   only:
     - candidate
 
 Docker push latest:
-  stage: docker push
+  stage: docker release
   image: docker
-  services:
-    - docker:dind
   script:
-    - NAME=$(cat app/name)
-    - VERSION=$(cat app/version)
-    - docker build -t ebarsukov/${NAME}:${VERSION}
-    - docker tag ebarsukov/${NAME}:${VERSION} ebarsukov/${NAME}:latest
-    - docker push ebarsukov/${NAME}:latest
+    - docker pull robocafe/${IMG_NAME}:test
+    - docker tag ebarsukov/${IMG_NAME}:test ebarsukov/${IMG_NAME}:latest
+    - docker push ebarsukov/${IMG_NAME}:latest
   before_script:
     - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
   only:
     - tag
 
 Docker push version:
-  stage: docker push
+  stage: docker release
   image: docker
-  services:
-    - docker:dind
   script:
-    - NAME=$(cat app/name)
-    - VERSION=$(cat app/version)
-    - docker build -t ebarsukov/${NAME}:${VERSION}
-    - docker push ebarsukov/${NAME}:${VERSION}
+    - docker pull robocafe/${IMG_NAME}:test
+    - docker tag ebarsukov/${IMG_NAME}:test ebarsukov/${IMG_NAME}:${IMG_VERSION}
+    - docker push ebarsukov/${IMG_NAME}:${IMG_VERSION}
   before_script:
     - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
   only:
