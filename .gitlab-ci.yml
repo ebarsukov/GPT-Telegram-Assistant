@@ -24,9 +24,6 @@ Docker build:
     - NAME=$(cat app/name)
     - VERSION=$(cat app/version)
     - docker build -t ebarsukov/${NAME}:${VERSION}  -f docker/Dockerfile .
-    - docker push ebarsukov/${NAME}:${VERSION}
-  before_script:
-    - echo -n ${DOCKER_PASS} | docker login -u robocafe --password-stdin
   only:
     - candidate
     - main
@@ -58,6 +55,20 @@ Docker push latest:
     - docker pull robocafe/${NAME}:${VERSION}
     - docker tag ebarsukov/${NAME}:${VERSION} ebarsukov/${NAME}:latest
     - docker push ebarsukov/${NAME}:latest
+  before_script:
+    - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
+  only:
+    - tag
+
+Docker push version:
+  stage: docker build
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - NAME=$(cat app/name)
+    - VERSION=$(cat app/version)
+    - docker push ebarsukov/${NAME}:${VERSION}
   before_script:
     - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
   only:
