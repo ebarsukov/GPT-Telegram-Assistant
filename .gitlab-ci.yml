@@ -26,8 +26,9 @@ Docker build:
   services:
     - docker:dind
   script:
-    - docker build -t ebarsukov/$IMG_NAME:test  -f docker/Dockerfile .
-    - docker push ebarsukov/$IMG_NAME:test
+    - NAME=$(cat app/name) 
+    - docker build -t ebarsukov/${NAME}:test  -f docker/Dockerfile .
+    - docker push ebarsukov/${NAME}:test
   before_script:
     - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
   only:
