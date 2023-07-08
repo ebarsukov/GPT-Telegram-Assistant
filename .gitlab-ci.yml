@@ -36,7 +36,7 @@ Docker push candidate:
   script:
     - NAME=$(cat app/name)
     - VERSION=$(cat app/version)
-    - docker pull robocafe/${NAME}:${VERSION}
+    - docker pull ebarsukov/${NAME}:${VERSION}
     - docker tag ebarsukov/${NAME}:${VERSION} ebarsukov/${NAME}:candidate
     - docker push ebarsukov/${NAME}:candidate
   before_script:
@@ -52,7 +52,7 @@ Docker push latest:
   script:
     - NAME=$(cat app/name)
     - VERSION=$(cat app/version)
-    - docker pull robocafe/${NAME}:${VERSION}
+    - docker pull ebarsukov/${NAME}:${VERSION}
     - docker tag ebarsukov/${NAME}:${VERSION} ebarsukov/${NAME}:latest
     - docker push ebarsukov/${NAME}:latest
   before_script:
