@@ -16,12 +16,11 @@ TELEGRAM_BOT_TOKEN = conf.environment.TELEGRAM_BOT_TOKEN
 
 def _error_handler(func):
     def wrapper(*args, **kwargs):
-        while True:
-            try:
-                return func(*args, **kwargs)
-            except Exception as err:  # pylint: disable=broad-except
-                logger.error(f"{MN} {err}")
-                return False
+        try:
+            return func(*args, **kwargs)
+        except Exception as err:  # pylint: disable=broad-except
+            logger.error(f"{MN} {err}")
+            return False
 
     return wrapper
 
@@ -38,7 +37,7 @@ class TeleBot:
 
     def start(self) -> None:
         """Run loop"""
-        pull_thr = threading.Thread(target=self._polling)
+        pull_thr = threading.Thread(target=self._polling_loop)
         pull_thr.start()
         while True:
             time.sleep(0.1)
@@ -67,6 +66,14 @@ class TeleBot:
         self._bot.send_photo(chat_id, raw_img, caption=caption)
         logger.debug(f"{MN} Send photo: {chat_id=}")
         return True
+    
+
+    def _polling_loop(self):
+        logger.info(f"{MN} Polling thread started ...")
+        while True:
+            self._polling()
+            time.sleep(10)
+            
 
     @_error_handler
     def _polling(self) -> None:
@@ -78,8 +85,8 @@ class TeleBot:
         def incoming_text(message):
             self._add_msg_to_request_buffer(message)
 
-        logger.info(f"{MN} Polling thread started ...")
-        self._bot.infinity_polling(interval=0, timeout=TIMEOUT)
+        # self._bot.infinity_polling(interval=0, timeout=TIMEOUT)
+        self._bot.polling(interval=0, timeout=TIMEOUT)
 
     def _add_msg_to_request_buffer(self, message, cmd=None):
         chat_id = message.chat.id
