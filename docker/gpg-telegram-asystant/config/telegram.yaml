@@ -1,0 +1,5 @@
+default:
+  telegram:
+    bot:
+      TOKEN: 5710604250:AAH-as2qVcjwP9qKQEi2gm8ojyHIOLTXUI0
+      # TOKEN: 6264078467:AAFojtcucWJg3Ni4gKUzTOwwRJleH281MuE

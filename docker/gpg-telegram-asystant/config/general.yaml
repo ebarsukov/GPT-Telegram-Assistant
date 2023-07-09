@@ -1,0 +1,15 @@
+default:
+  messager:
+    OUTGOING_MSG_QUEUE_LEN: 10
+
+  log:
+    FILE_NAME_FORMAT: "{time:YYYY-MM-DD_HH-mm-ss-SS}.log"
+    LOG_FILE_NAME_FORMAT: "{time:YYYY-MM-DD_HH-mm-ss-SS}.log"
+    FORMAT: "{time:YY-MM-DD HH:mm:ss.SS} | {level} | {message}"
+    ROTATION: 10 MB
+    RETETION: 1 week
+    LEVEL: DEBUG
+
+  openai:
+    API_KEY: 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
+    AI_MODEL: gpt-3.5-turbo
