@@ -15,4 +15,4 @@ default:
     FORMAT: "{time:YY-MM-DD HH:mm:ss.SS} | {level} | {message}"
     ROTATION: 10 MB
     RETETION: 1 week
-    LEVEL: DEBUG
+    LEVEL: INFO

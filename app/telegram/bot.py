@@ -48,8 +48,11 @@ class TeleBot:
         if not self._response_buffer:
             return
         msg = self._response_buffer[0]
-        self._response_buffer.pop(0)
-        self.send_text(msg.chat_id, msg.text)
+        
+        if self.send_text(msg.chat_id, msg.text):
+            self._response_buffer.pop(0)
+        else:
+            time.sleep(10)
 
     @_error_handler
     def send_text(self, chat_id, text) -> bool:
