@@ -3,10 +3,11 @@ buffer
 """
 import time
 from loguru import logger
+from conf import conf
 
 MN = "[Message Buffer]"
 
-BUFFER_MSG_LIFETIME_SEC = 60
+BUFFER_MSG_LIFETIME_SEC = int(conf.environment.BUFFER_MSG_LIFETIME_SEC)
 
 telegram_to_gpt_buffer = []
 gpt_to_telegram_buffer = []
