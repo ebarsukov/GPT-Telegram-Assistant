@@ -3,7 +3,7 @@ buffer
 """
 import time
 from loguru import logger
-from conf import conf
+from config import conf
 
 MN = "[Message Buffer]"
 

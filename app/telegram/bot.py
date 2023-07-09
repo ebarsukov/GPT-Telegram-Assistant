@@ -7,7 +7,7 @@ import telebot
 from loguru import logger
 from model import MessageModel
 from buffer import telegram_to_gpt_buffer, gpt_to_telegram_buffer
-from conf import conf
+from config import conf
 
 MN = "[Telebot]"
 TIMEOUT = 20

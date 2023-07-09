@@ -6,7 +6,7 @@ import sys
 import time
 import openai
 from loguru import logger
-from conf import conf
+from config import conf
 from model import GptSessionModel, MessageModel
 from buffer import (
     telegram_to_gpt_buffer,

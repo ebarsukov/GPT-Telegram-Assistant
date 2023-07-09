@@ -4,7 +4,7 @@ services:
     image: gpt-telegram-asystant:latest
     restart: unless-stopped
     volumes:
-      - ./gpt-telegram-asystant:/gpt-telegram-asystant
+      - ./gpt-telegram-asystant:/user_data
 
     environment:
       OPENAI_API_KEY: sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -16,4 +16,3 @@ services:
       OPENAI_CHAT_SYSTEM_PRESET: "You are an intellectual assistant, The name of your interlocutor is {user_name}"
       TELEGRAM_BOT_TOKEN: xxxxxxxxxx:xx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
       BUFFER_MSG_LIFETIME_SEC: 180
-      WORKDIR: ./gpt-telegram-asystant
