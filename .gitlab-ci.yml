@@ -23,13 +23,13 @@ docker push develop:
   services:
     - docker:dind
   script:
-    - NAME = $(cat app/name)
+    - NAME=$(cat app/name)
     - docker build -t ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:develop -f docker/Dockerfile .
     - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:develop
   before_script:
     - echo -n ${DOCKER_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
-  only:
-    - develop
+  when: manual
+
 
 docker push candidate:
   stage: docker build and push
@@ -37,7 +37,7 @@ docker push candidate:
   services:
     - docker:dind
   script:
-    - NAME = $(cat app/name)
+    - NAME=$(cat app/name)
     - docker build -t ebarsukov/${NAME}:candidate -f docker/Dockerfile .
     - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:candidate
   before_script:
@@ -51,7 +51,7 @@ docker push latest:
   services:
     - docker:dind
   script:
-    - NAME = $(cat app/name)
+    - NAME=$(cat app/name)
     - docker build -t ebarsukov/${NAME}:latest -f docker/Dockerfile .
     - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:candidate
   before_script:
@@ -65,8 +65,8 @@ docker push version:
   services:
     - docker:dind
   script:
-    - NAME = $(cat app/name)
-    - VERSION = $(cat app/version)
+    - NAME=$(cat app/name)
+    - VERSION=$(cat app/version)
     - docker build -t ebarsukov/${NAME}:$(VERSION) -f docker/Dockerfile .
     - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:$(VERSION)
   before_script:
