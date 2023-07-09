@@ -47,7 +47,7 @@ class TeleBot:
         if not self._response_buffer:
             return
         msg = self._response_buffer[0]
-        
+
         if self.send_text(msg.chat_id, msg.text):
             self._response_buffer.pop(0)
         else:
@@ -66,14 +66,12 @@ class TeleBot:
         self._bot.send_photo(chat_id, raw_img, caption=caption)
         logger.debug(f"{MN} Send photo: {chat_id=}")
         return True
-    
 
     def _polling_loop(self):
         logger.info(f"{MN} Polling thread started ...")
         while True:
             self._polling()
             time.sleep(10)
-            
 
     @_error_handler
     def _polling(self) -> None:
