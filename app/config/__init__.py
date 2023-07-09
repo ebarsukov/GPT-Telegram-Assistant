@@ -85,7 +85,7 @@ def _make_config():
 
     if os.getenv("DOCKER"):
         confdir = "/user_data/config"
-        logdir = confdir
+        logdir = "/user_data/log"
         _make_docker_config_dir(confdir)
     else:
         confdir = CURRENT_DIR

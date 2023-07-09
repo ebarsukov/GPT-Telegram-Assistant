@@ -3,7 +3,7 @@ stages:
   - docker build and push
 
 variables:
-  DOCKER_REGISTRY_NAMESPACE: ebarsukov
+  DOCKER_REGISTRY_NAMESPACE: edevai
 
 pylint:
   stage: test
@@ -27,7 +27,7 @@ docker develop:
     - docker build -t ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:develop -f docker/Dockerfile .
     - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:develop
   before_script:
-    - echo -n ${DOCKER_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
+    - echo -n ${DOCKER_HUB_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
   when: manual
 
 
@@ -41,7 +41,7 @@ docker candidate:
     - docker build -t ebarsukov/${NAME}:candidate -f docker/Dockerfile .
     - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:candidate
   before_script:
-    - echo -n ${DOCKER_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
+    - echo -n ${DOCKER_HUB_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
   only:
     - candidate
 
