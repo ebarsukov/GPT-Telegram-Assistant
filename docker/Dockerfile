@@ -10,6 +10,6 @@ COPY requirements.txt .
 
 RUN pip install --no-cache -r requirements.txt
 
-ARG DOCKER=True
+ENV DOCKER=True
 
 CMD ["python", "main.py", "-d"]
