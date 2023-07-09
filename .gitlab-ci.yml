@@ -17,7 +17,7 @@ pylint:
     - candidate
     - main
 
-docker push develop:
+docker develop:
   stage: docker build and push
   image: docker:latest
   services:
@@ -31,7 +31,7 @@ docker push develop:
   when: manual
 
 
-docker push candidate:
+docker candidate:
   stage: docker build and push
   image: docker
   services:
@@ -45,7 +45,7 @@ docker push candidate:
   only:
     - candidate
 
-docker push latest:
+docker latest:
   stage: docker build and push
   image: docker
   services:
@@ -59,7 +59,7 @@ docker push latest:
   only:
     - tag
 
-docker push version:
+docker version:
   stage: docker build and push
   image: docker
   services:
