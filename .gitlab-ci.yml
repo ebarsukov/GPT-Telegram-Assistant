@@ -1,12 +1,9 @@
 stages:
   - test
-  - docker build
-  - docker candidate
-  - docker release
+  - docker build and push
 
 variables:
-  IMG_NAME: $(cat app/name)
-  IMG_VERSION: $(cat app/version)
+  DOCKER_REGISTRY_NAMESPACE: ebarsukov
 
 pylint:
   stage: test
@@ -20,59 +17,59 @@ pylint:
     - candidate
     - main
 
-Docker build:
-  stage: docker build
-  image: docker
+docker push develop:
+  stage: docker build and push
+  image: docker:latest
   services:
     - docker:dind
   script:
-    - NAME=$(cat app/name) 
-    - docker build -t ebarsukov/${NAME}:test  -f docker/Dockerfile .
-    - docker push ebarsukov/${NAME}:test
+    - NAME = $(cat app/name)
+    - docker build -t ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:develop -f docker/Dockerfile .
+    - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:develop
   before_script:
-    - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
+    - echo -n ${DOCKER_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
   only:
-    - candidate
-    - main
+    - develop
 
 docker push candidate:
-  stage: docker candidate
+  stage: docker build and push
   image: docker
   services:
     - docker:dind
   script:
-    - docker pull robocafe/${IMG_NAME}:test
-    - docker tag ebarsukov/${IMG_NAME}:test ebarsukov/${IMG_NAME}:candidate
-    - docker push ebarsukov/${IMG_NAME}:candidate
+    - NAME = $(cat app/name)
+    - docker build -t ebarsukov/${NAME}:candidate -f docker/Dockerfile .
+    - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:candidate
   before_script:
-    - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
+    - echo -n ${DOCKER_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
   only:
     - candidate
 
 docker push latest:
-  stage: docker release
+  stage: docker build and push
   image: docker
   services:
     - docker:dind
   script:
-    - docker pull robocafe/${IMG_NAME}:test
-    - docker tag ebarsukov/${IMG_NAME}:test ebarsukov/${IMG_NAME}:latest
-    - docker push ebarsukov/${IMG_NAME}:latest
+    - NAME = $(cat app/name)
+    - docker build -t ebarsukov/${NAME}:latest -f docker/Dockerfile .
+    - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:candidate
   before_script:
-    - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
+    - echo -n ${DOCKER_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
   only:
     - tag
 
 docker push version:
-  stage: docker release
+  stage: docker build and push
   image: docker
   services:
     - docker:dind
   script:
-    - docker pull robocafe/${IMG_NAME}:test
-    - docker tag ebarsukov/${IMG_NAME}:test ebarsukov/${IMG_NAME}:${IMG_VERSION}
-    - docker push ebarsukov/${IMG_NAME}:${IMG_VERSION}
+    - NAME = $(cat app/name)
+    - VERSION = $(cat app/version)
+    - docker build -t ebarsukov/${NAME}:$(VERSION) -f docker/Dockerfile .
+    - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:$(VERSION)
   before_script:
-    - echo -n ${DOCKER_PASS} | docker login -u ebarsukov --password-stdin
+    - echo -n ${DOCKER_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
   only:
     - tag

@@ -1,9 +1,9 @@
 .PHONY: help venv test app docker
 
-APPDIR = app
-APPNAME = `cat ${APPDIR}/name`
-VERSION =`cat ${APPDIR}/version`
-VENV = venv/bin
+APPDIR=app
+APPNAME=`cat ${APPDIR}/name`
+VERSION=`cat ${APPDIR}/version`
+VENV=venv/bin
 
 _COL_PINK_BOLD = \033[1m\033[35m
 _COL_GREEN_BOLD = \033[1m\033[32m 
