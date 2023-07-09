@@ -92,9 +92,7 @@ class ChatAI:
             )
             logger.debug(f"{MN} Make new session: {msg.chat_id=}")
 
-        self._sessions[msg.chat_id].messages.append(
-            {"role": "user", "content": msg.text}
-        )
+        self._sessions[msg.chat_id].messages.append({"role": "user", "content": msg.text})
 
         return self._sessions[msg.chat_id].messages
 
@@ -115,12 +113,11 @@ class ChatAI:
             if time.time() - msg.timestamp > OPENAI_CHAT_LIFETIME_SEC:
                 self._output_buffer.pop(num)
                 logger.warning(
-                    f"{MN} Delet obsolete outbut buffer msg: "
-                    + f"chat_id={msg.chat_id=} {msg.user_name=} {msg.text=}"
+                    f"{MN} Delet obsolete outbut buffer msg: " + f"chat_id={msg.chat_id=} {msg.user_name=} {msg.text=}"
                 )
                 return
 
-    def _run_command(self, msg):
+    def _run_command(self, msg) -> None:
         logger.debug(f"{MN} Command: {msg.chat_id=} {msg.user_name=} {msg.command=}")
         match msg.command:
             case "new_session":
@@ -128,13 +125,6 @@ class ChatAI:
                 msg.text = "New session started..."
                 msg.timestamp = time.time()
                 self._output_buffer.append(msg)
-
-        self._sessions[msg.chat_id].messages.append(
-            {"role": "user", "content": msg.text}
-        )
-        self._sessions[msg.chat_id].last_msg_time = time.time()
-
-        return self._sessions[msg.chat_id].messages
 
     def _input_buffer_handling(self):
         if not self._input_buffer:
