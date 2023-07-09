@@ -30,7 +30,6 @@ docker develop:
     - echo -n ${DOCKER_HUB_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
   when: manual
 
-
 docker candidate:
   stage: docker build and push
   image: docker
@@ -38,7 +37,7 @@ docker candidate:
     - docker:dind
   script:
     - NAME=$(cat app/name)
-    - docker build -t ebarsukov/${NAME}:candidate -f docker/Dockerfile .
+    - docker build -t ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:candidate -f docker/Dockerfile .
     - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:candidate
   before_script:
     - echo -n ${DOCKER_HUB_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
@@ -52,7 +51,7 @@ docker latest:
     - docker:dind
   script:
     - NAME=$(cat app/name)
-    - docker build -t ebarsukov/${NAME}:latest -f docker/Dockerfile .
+    - docker build -t ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:latest -f docker/Dockerfile .
     - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:candidate
   before_script:
     - echo -n ${DOCKER_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
@@ -67,7 +66,7 @@ docker version:
   script:
     - NAME=$(cat app/name)
     - VERSION=$(cat app/version)
-    - docker build -t ebarsukov/${NAME}:$(VERSION) -f docker/Dockerfile .
+    - docker build -t ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:$(VERSION) -f docker/Dockerfile .
     - docker push ${DOCKER_REGISTRY_NAMESPACE}/${NAME}:$(VERSION)
   before_script:
     - echo -n ${DOCKER_PASS} | docker login -u ${DOCKER_REGISTRY_NAMESPACE} --password-stdin
